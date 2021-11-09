@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 let list = [];
 
 const getAllTodo = () => {
+  // Sort by isDone == false
   return list.sort((a, b) => a.isDone - b.isDone);
 };
 
