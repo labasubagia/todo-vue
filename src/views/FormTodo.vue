@@ -53,7 +53,7 @@
 
 <script>
 import { ArrowLeftIcon } from '@heroicons/vue/solid';
-import { addTodo, updateTodo, getTodoById } from '@/store/todo';
+
 export default {
   components: { ArrowLeftIcon },
   data() {
@@ -66,27 +66,32 @@ export default {
     id() {
       return this.$route.params.id;
     },
+    todo() {
+      if (!this.id) return null;
+      return this.$store.getters['todo/getById'](this.id);
+    },
     formTitle() {
-      return this.id ? 'Edit' : 'Add';
+      return this.todo ? 'Edit' : 'Add';
     },
   },
-  mounted() {
-    this.loadTodo();
+  watch: {
+    todo: {
+      immediate: true,
+      handler(val) {
+        if (!val) return;
+        this.activity = val?.activity;
+        this.isDone = val?.isDone;
+      },
+    },
   },
   methods: {
-    loadTodo() {
-      if (!this.id) return;
-      const todo = getTodoById(this.id);
-      this.activity = todo.activity;
-      this.isDone = todo.isDone;
-    },
     onSubmit() {
-      const payload = { activity: this.activity, isDone: this.isDone };
-      if (this.id) {
-        updateTodo(this.id, payload);
-      } else {
-        addTodo(payload);
-      }
+      const action = this.id ? 'todo/update' : 'todo/add';
+      this.$store.commit(action, {
+        id: this.id,
+        activity: this.activity,
+        isDone: this.isDone,
+      });
       this.goBack();
     },
     goBack() {

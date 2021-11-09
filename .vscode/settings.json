@@ -3,7 +3,8 @@
     "preconnect",
     "tailwindcss",
     "vite",
-    "vitejs"
+    "vitejs",
+    "vuex"
   ],
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {

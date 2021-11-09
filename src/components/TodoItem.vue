@@ -2,7 +2,7 @@
   <div class="bg-blue-50 px-4 py-3 mb-2 rounded flex justify-between">
     <div
       class="flex items-center cursor-pointer w-full"
-      @click="onToggleDone(id)"
+      @click="$store.commit('todo/toggleDone', id)"
     >
       <!-- Name -->
       <span :class="{ 'line-through': isDone }">
@@ -20,7 +20,7 @@
       <!-- Remove -->
       <TrashIcon
         class="w-7 text-red-500 cursor-pointer"
-        @click="onRemove(id)"
+        @click="$store.commit('todo/remove', id)"
       />
     </div>
   </div>
@@ -38,8 +38,6 @@ export default {
     isDone: Boolean,
     activity: String,
     id: String,
-    onRemove: Function,
-    onToggleDone: Function,
   },
 };
 </script>

@@ -14,8 +14,6 @@
         :key="id"
         :activity="activity"
         :is-done="isDone"
-        :on-remove="remove"
-        :on-toggle-done="toggleTodo"
       />
     </div>
     <div
@@ -29,7 +27,6 @@
 
 <script>
 import { PlusCircleIcon } from '@heroicons/vue/solid';
-import { getAllTodo, toggleIsDone, removeTodo } from '@/store/todo';
 import TodoItem from '@/components/TodoItem.vue';
 
 export default {
@@ -37,26 +34,9 @@ export default {
     PlusCircleIcon,
     TodoItem,
   },
-  data() {
-    return {
-      todoList: getAllTodo(),
-    };
-  },
-  mounted() {
-    this.loadTodoList();
-  },
-  methods: {
-    loadTodoList() {
-      this.todoList = getAllTodo();
-      this.$forceUpdate();
-    },
-    toggleTodo(id) {
-      toggleIsDone(id);
-      this.loadTodoList();
-    },
-    remove(id) {
-      removeTodo(id);
-      this.loadTodoList();
+  computed: {
+    todoList() {
+      return this.$store.getters['todo/getAllSorted'];
     },
   },
 };
