@@ -16,14 +16,15 @@
 </template>
 
 <script>
+import { computed } from '@vue/reactivity';
+
 export default {
   props: {
     message: String,
   },
-  computed: {
-    page() {
-      return this.message ? `| ${this.message}` : null;
-    },
+  setup(props) {
+    const page = computed(() => (props.message ? `| ${props.message}` : ''));
+    return { page };
   },
 };
 </script>

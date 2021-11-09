@@ -4,9 +4,13 @@
     @submit.prevent="onSubmit"
   >
     <div class="flex justify-between items-center pb-4">
-      <router-link to="/" class="px-2 text-sm rounded py-1 border-2">
+      <button
+        type="button"
+        class="px-2 text-sm rounded py-1 border-2"
+        @click="goBack"
+      >
         <ArrowLeftIcon class="w-4 h-4 text-gray-500" />
-      </router-link>
+      </button>
       <p class="text-center w-full font-bold">{{ formTitle }} Todo</p>
     </div>
 
@@ -43,7 +47,7 @@
 
       <div class="flex justify-center mt-2 mb-5">
         <button class="btn bg-green-400 mr-4">Save</button>
-        <button type="button" class="btn bg-red-400" @click="goBack()">
+        <button type="button" class="btn bg-red-400" @click="goBack">
           Cancel
         </button>
       </div>
@@ -53,55 +57,67 @@
 
 <script>
 import { ArrowLeftIcon } from '@heroicons/vue/solid';
+import { computed, ref } from '@vue/reactivity';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { watch } from '@vue/runtime-core';
 
 export default {
-  components: { ArrowLeftIcon },
-  data() {
-    return {
-      activity: '',
-      isDone: false,
-    };
+  components: {
+    ArrowLeftIcon,
   },
-  computed: {
-    id() {
-      return this.$route.params.id;
-    },
-    todo() {
-      if (!this.id) return null;
-      return this.$store.getters['todo/getById'](this.id);
-    },
-    formTitle() {
-      return this.todo ? 'Edit' : 'Add';
-    },
-  },
-  watch: {
-    todo: {
-      immediate: true,
-      handler(val) {
-        if (!val) return;
-        this.activity = val?.activity;
-        this.isDone = val?.isDone;
+  setup() {
+    const route = useRoute();
+    const router = useRouter();
+    const store = useStore();
+
+    const activity = ref('');
+    const isDone = ref(false);
+
+    const id = computed(() => route.params.id);
+    const todo = computed(() => store.getters['todo/getById'](id.value));
+    const formTitle = computed(() => (todo.value ? 'Edit' : 'Add'));
+
+    watch(
+      () => todo,
+      (todo) => {
+        if (!todo.value) return;
+        activity.value = todo.value?.activity;
+        isDone.value = todo.value?.isDone;
       },
-    },
-  },
-  methods: {
-    onSubmit() {
-      const action = this.todo ? 'todo/update' : 'todo/add';
-      this.$store.commit(action, {
-        id: this.id,
-        activity: this.activity,
-        isDone: this.isDone,
+      { immediate: true }
+    );
+
+    const onSubmit = () => {
+      const action = todo.value ? 'todo/update' : 'todo/add';
+      store.commit(action, {
+        id: id.value,
+        activity: activity.value,
+        isDone: isDone.value,
       });
-      this.goBack();
-    },
-    goBack() {
-      this.clearForm();
-      this.$router.replace({ path: '/' });
-    },
-    clearForm() {
-      this.activity = '';
-      this.isDone = false;
-    },
+      goBack();
+    };
+
+    const goBack = () => {
+      clearForm();
+      router.replace({ path: '/' });
+    };
+
+    const clearForm = () => {
+      activity.value = '';
+      isDone.value = false;
+    };
+
+    return {
+      activity,
+      isDone,
+      id,
+      todo,
+      formTitle,
+      goBack,
+      clearForm,
+      onSubmit,
+    };
   },
 };
 </script>

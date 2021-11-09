@@ -1,9 +1,6 @@
 <template>
   <div class="bg-blue-50 px-4 py-3 mb-2 rounded flex justify-between">
-    <div
-      class="flex items-center cursor-pointer w-full"
-      @click="$store.commit('todo/toggleDone', id)"
-    >
+    <div class="flex items-center cursor-pointer w-full" @click="toggleDone">
       <!-- Name -->
       <span :class="{ 'line-through': isDone }">
         {{ activity }}
@@ -18,16 +15,14 @@
       </router-link>
 
       <!-- Remove -->
-      <TrashIcon
-        class="w-7 text-red-500 cursor-pointer"
-        @click="$store.commit('todo/remove', id)"
-      />
+      <TrashIcon class="w-7 text-red-500 cursor-pointer" @click="remove" />
     </div>
   </div>
 </template>
 
 <script>
 import { PencilAltIcon, TrashIcon } from '@heroicons/vue/outline';
+import { useStore } from 'vuex';
 
 export default {
   components: {
@@ -38,6 +33,19 @@ export default {
     isDone: Boolean,
     activity: String,
     id: String,
+  },
+  setup(props) {
+    const store = useStore();
+
+    const remove = () => {
+      store.commit('todo/remove', props.id);
+    };
+
+    const toggleDone = () => {
+      store.commit('todo/toggleDone', props.id);
+    };
+
+    return { remove, toggleDone };
   },
 };
 </script>

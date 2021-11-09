@@ -28,16 +28,18 @@
 <script>
 import { PlusCircleIcon } from '@heroicons/vue/solid';
 import TodoItem from '@/components/TodoItem.vue';
+import { computed } from '@vue/reactivity';
+import { useStore } from 'vuex';
 
 export default {
   components: {
     PlusCircleIcon,
     TodoItem,
   },
-  computed: {
-    todoList() {
-      return this.$store.getters['todo/getAllSorted'];
-    },
+  setup() {
+    const store = useStore();
+    const todoList = computed(() => store.getters['todo/getAllSorted']);
+    return { todoList };
   },
 };
 </script>
