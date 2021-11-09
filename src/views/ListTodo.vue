@@ -7,35 +7,17 @@
   </div>
 
   <div class="mt-4">
-    <ul v-if="todoList.length">
-      <li
-        v-for="(todo, i) in todoList"
-        :key="i"
-        class="bg-blue-50 px-4 py-3 mb-2 rounded flex justify-between"
-      >
-        <div
-          class="flex items-center cursor-pointer w-full"
-          @click="toggleTodo(todo.id)"
-        >
-          <span :class="{ 'line-through': todo.isDone }">
-            {{ todo.activity }}
-          </span>
-        </div>
-
-        <div class="flex items-center">
-          <!-- Edit -->
-          <router-link class="mr-2" :to="`/form/${todo.id}`">
-            <PencilAltIcon class="w-7 text-yellow-600 cursor-pointer" />
-          </router-link>
-
-          <!-- Remove -->
-          <TrashIcon
-            class="w-7 text-red-500 cursor-pointer"
-            @click="remove(todo.id)"
-          />
-        </div>
-      </li>
-    </ul>
+    <div v-if="todoList.length">
+      <TodoItem
+        v-for="{ id, activity, isDone } in todoList"
+        :id="id"
+        :key="id"
+        :activity="activity"
+        :is-done="isDone"
+        :on-remove="remove"
+        :on-toggle-done="toggleTodo"
+      />
+    </div>
     <div
       v-else
       class="px-8 py-16 flex justify-center items-center rounded-lg bg-gray-50"
@@ -47,14 +29,13 @@
 
 <script>
 import { PlusCircleIcon } from '@heroicons/vue/solid';
-import { PencilAltIcon, TrashIcon } from '@heroicons/vue/outline';
 import { getAllTodo, toggleIsDone, removeTodo } from '@/store/todo';
+import TodoItem from '@/components/TodoItem.vue';
 
 export default {
   components: {
     PlusCircleIcon,
-    PencilAltIcon,
-    TrashIcon,
+    TodoItem,
   },
   data() {
     return {

@@ -29,6 +29,8 @@
           type="text"
           placeholder="e.g Cooking"
           required
+          oninvalid="this.setCustomValidity('Please fill activity name')"
+          onkeyup="this.setCustomValidity('')"
         />
       </div>
 

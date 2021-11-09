@@ -6,7 +6,10 @@
       items-center
       font-main
       text-gray-700
-      bg-blue-50
+      bg-gradient-to-r
+      from-purple-300
+      via-blue-300
+      to-green-300
       h-screen
       w-screen
     "
@@ -20,7 +23,7 @@
         bg-white
         rounded-md
         overflow-hidden
-        shadow-lg
+        shadow-2xl
       "
     >
       <HeaderTop :message="viewName" />
