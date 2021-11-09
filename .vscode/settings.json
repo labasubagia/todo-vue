@@ -1,0 +1,19 @@
+{
+  "cSpell.words": [
+    "preconnect",
+    "tailwindcss",
+    "vite",
+    "vitejs"
+  ],
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "typescript.validate.enable": false,
+}
