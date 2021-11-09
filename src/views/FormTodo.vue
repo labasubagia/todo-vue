@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      const action = this.id ? 'todo/update' : 'todo/add';
+      const action = this.todo ? 'todo/update' : 'todo/add';
       this.$store.commit(action, {
         id: this.id,
         activity: this.activity,
